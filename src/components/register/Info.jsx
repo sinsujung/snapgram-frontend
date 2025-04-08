@@ -4,6 +4,22 @@ import Button from "../common/Button.jsx";
 import { useNavigate } from "react-router-dom";
 
 const Info = () => {
+
+    const isValidEmail = (email) => {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    };
+
+    const isValidPassword = (password) => {
+        const regex = /^(?=.*[!@#$%^&*()\-_=+[\]{};':"\\|,.<>/?]).{9,}$/;
+        return regex.test(password);
+    };
+
+    const isValidNickName = (nick) => {
+        const regex = /^[A-Za-z]+$/;
+        return regex.test(nick);
+    };
+
     const h4Style = {
         fontSize: "0.8rem",
         margin: "18px",
@@ -28,8 +44,25 @@ const Info = () => {
     };
 
     const handleJoinClick = () => {
-        if (!textItems.name || !textItems.email || !textItems.password || !textItems.nickName) {
+        const { email, password, name, nickName } = textItems;
+
+        if (!email || !password || !name || !nickName) {
             alert("모든 정보를 입력해주세요!");
+            return;
+        }
+
+        if (!isValidEmail(email)) {
+            alert("유효한 이메일 형식이 아닙니다.");
+            return;
+        }
+
+        if (!isValidPassword(password)) {
+            alert("비밀번호는 특수문자를 포함해 9자 이상이어야 합니다.");
+            return;
+        }
+
+        if (!isValidNickName(nickName)) {
+            alert("사용자 이름은 영어 알파벳만 사용할 수 있습니다.");
             return;
         }
         localStorage.setItem("signupData", JSON.stringify(textItems));

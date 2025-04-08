@@ -5,7 +5,7 @@ import Login from "../login/Login.jsx";
 const LoginPage = () => {
 
     return (
-        <div className="out-container">
+        <div className="login-out-container">
             <div className="login-container">
                 <Header/>
                     <div className="input-container">

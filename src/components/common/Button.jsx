@@ -3,16 +3,16 @@ const Button = ({text, onClick, style}) => {
         <button
             onClick={onClick}
             style={{
-                padding: "10px",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-                backgroundColor: "#007bff",
-                color: "white",
-                fontWeight: "bold",
+                boxSizing: "border-box", // ✅ 추가
                 width: "100%",
-                margin: "10px auto",
-                textAlign: "center"
+                maxWidth: "300px",
+                padding: "10px",
+                marginBottom: "12px",
+                borderRadius: "4px",
+                border: "none",
+                backgroundColor: "#3897f0",
+                color: "white",
+                cursor: "pointer",
             }}
         >
             {text}

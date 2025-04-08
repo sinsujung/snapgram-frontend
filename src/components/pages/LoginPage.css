@@ -1,4 +1,9 @@
-.out-container {
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+.login-out-container {
     display: flex;
     flex-direction: column;
     align-items: center;
