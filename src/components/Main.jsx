@@ -4,4 +4,4 @@ const Main = () => {
     );
 };
 
-export default Main;cd snapgram
+export default Main;
