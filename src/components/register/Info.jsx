@@ -15,9 +15,9 @@ const Info = () => {
         return regex.test(password);
     };
 
-    const isValidNickName = (nick) => {
+    const isValidNickName = (nickname) => {
         const regex = /^[A-Za-z]+$/;
-        return regex.test(nick);
+        return regex.test(nickname);
     };
 
     const h4Style = {
@@ -30,7 +30,7 @@ const Info = () => {
         email: "",
         password: "",
         name: "",
-        nickName: "",
+        nickname: "",
     });
 
     const navigate = useNavigate();
@@ -44,9 +44,9 @@ const Info = () => {
     };
 
     const handleJoinClick = () => {
-        const { email, password, name, nickName } = textItems;
+        const { email, password, name, nickname } = textItems;
 
-        if (!email || !password || !name || !nickName) {
+        if (!email || !password || !name || !nickname) {
             alert("모든 정보를 입력해주세요!");
             return;
         }
@@ -61,7 +61,7 @@ const Info = () => {
             return;
         }
 
-        if (!isValidNickName(nickName)) {
+        if (!isValidNickName(nickname)) {
             alert("사용자 이름은 영어 알파벳만 사용할 수 있습니다.");
             return;
         }
@@ -106,9 +106,9 @@ const Info = () => {
 
             <Input
                 type="text"
-                name="nickName"
+                name="nickname"
                 placeholder="사용자 이름"
-                value={textItems.nickName}
+                value={textItems.nickname}
                 onChange={handleChange}
             />
 

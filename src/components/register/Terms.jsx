@@ -6,6 +6,7 @@ import Button from "../common/Button";
 import axios from "axios";
 
 const Terms = () => {
+
     const navigate = useNavigate();
     const [checkedItems, setCheckedItems] = useState({
         all: false,
@@ -57,8 +58,11 @@ const Terms = () => {
         };
 
         try {
-            const response = await axios.post("http://localhost:8080/api/users/signup", requestData);
+            const response = await axios.post("http://192.168.0.18:8080/api/user/signup", requestData);
+            console.log("회원가입 요청")
+            console.log(response);
             const { code, message } = response.data;
+
 
             if (code === 0) {
                 alert("회원가입이 완료되었습니다!");
@@ -93,28 +97,7 @@ const Terms = () => {
 
     // 오류 메시지 처리
     const handleError = (code, message) => {
-        switch (code) {
-            case 1001:
-                alert("이미 사용 중인 이메일입니다.");
-                break;
-            case 1002:
-                alert("이미 사용 중인 닉네임입니다.");
-                break;
-            case 1003:
-                alert("잘못된 이메일 형식입니다.");
-                break;
-            case 1004:
-                alert("비밀번호 형식을 확인해주세요.");
-                break;
-            case 1005:
-                alert("이용약관에 동의해야 합니다.");
-                break;
-            case 2000:
-                alert("예상치 못한 오류가 발생했습니다.");
-                break;
-            default:
-                alert(message || "알 수 없는 오류가 발생했습니다.");
-        }
+        alert(message || "알 수 없는 오류가 발생했습니다.");
     };
 
     // 다음 버튼 클릭 시 모든 필수 약관 체크 확인
