@@ -2,10 +2,10 @@ import Input from "../common/Input.jsx";
 import Button from "../common/Button.jsx";
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 const Login = () => {
-    const [textItems, setTextItems] = useState({
+    const [loginItems, setLoginItems] = useState({
         email: "",
         password: "",
     });
@@ -17,20 +17,17 @@ const Login = () => {
         return regex.test(email);
     };
 
-    const handleForgotPasswordClick = () => {
-        window.open("/forgot-password", "비밀번호 찾기", "width=500,height=600");
-    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setTextItems((prevState) => ({
+        setLoginItems((prevState) => ({
             ...prevState,
             [name]: value,
         }));
     };
 
     const handleLoginButtonClick = async () => {
-        const { email, password } = textItems;
+        const { email, password } = loginItems;
 
         if (!email || !password) {
             alert("모든 정보를 입력해주세요!");
@@ -43,29 +40,46 @@ const Login = () => {
         }
 
         const requestData = {
-            email,
-            password,
+            email: email,
+            password: password,
+            // email,
+            // password,
         };
-
         try {
-            const response = await axios.post("http://192.168.0.18:8080/api/user/login", requestData);
-            const { code, data } = response.data;
+            // Mock API를 사용한 로그인 테스트
+            const response = await axios.post("https://jsonplaceholder.typicode.com/posts", requestData);
 
-            if (code === 0) {
-                localStorage.setItem("token", data);
-                alert("로그인에 성공했습니다!");
-                navigate("/");
+            // Mock API의 응답이 성공적인지 확인
+            if (response.status === 201) {
+                alert("로그인에 성공했습니다! (Mock API)");
+                navigate("/"); // 메인 페이지로 이동
             } else {
-                alert("로그인에 실패했습니다.");
+                alert("로그인에 실패했습니다. (Mock API 응답 오류)");
             }
+
         } catch (error) {
-            if (error.response && error.response.data) {
-                const { code, message } = error.response.data;
-                alert(message || `오류 발생 (코드: ${code})`);
-            } else {
-                alert("서버가 응답하지 않습니다.");
-            }
+            alert("서버가 응답하지 않습니다. (Mock API 테스트)");
         }
+
+        // try {
+        //     const response = await axios.post("http://192.168.0.18:8080/api/user/login", requestData);
+        //     const { code, data } = response.data;
+        //
+        //     if (code === 0) {
+        //         localStorage.setItem("token", data);
+        //         alert("로그인에 성공했습니다!");
+        //         navigate("/");
+        //     } else {
+        //         alert("로그인에 실패했습니다.");
+        //     }
+        // } catch (error) {
+        //     if (error.response && error.response.data) {
+        //         const { code, message } = error.response.data;
+        //         alert(message || `오류 발생 (코드: ${code})`);
+        //     } else {
+        //         alert("서버가 응답하지 않습니다.");
+        //     }
+        // }
     };
 
     return (
@@ -74,22 +88,22 @@ const Login = () => {
                 type="email"
                 name="email"
                 placeholder="이메일을 입력해주세요."
-                value={textItems.email}
+                value={loginItems.email}
                 onChange={handleChange}
             />
             <Input
                 type="password"
                 name="password"
                 placeholder="비밀번호를 입력해주세요."
-                value={textItems.password}
+                value={loginItems.password}
                 onChange={handleChange}
             />
             <div style={{ marginTop: "24px", width: "100%" }}>
                 <Button text="로그인" onClick={handleLoginButtonClick} />
             </div>
-            <p onClick={handleForgotPasswordClick} style={{ color: "white", cursor: "pointer" }}>
+            <Link to="/find-password" style={{ color: "white", cursor: "pointer" }}>
                 비밀번호 찾기
-            </p>
+            </Link>
         </div>
     );
 };

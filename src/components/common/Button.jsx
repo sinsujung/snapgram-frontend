@@ -3,9 +3,9 @@ const Button = ({text, onClick, style}) => {
         <button
             onClick={onClick}
             style={{
-                boxSizing: "border-box", // ✅ 추가
+                boxSizing: "border-box",
                 width: "100%",
-                maxWidth: "300px",
+                maxWidth: "200px",
                 padding: "10px",
                 marginBottom: "12px",
                 borderRadius: "4px",
@@ -13,6 +13,7 @@ const Button = ({text, onClick, style}) => {
                 backgroundColor: "#3897f0",
                 color: "white",
                 cursor: "pointer",
+                ...style
             }}
         >
             {text}

@@ -1,4 +1,4 @@
-const Input = ({type = "text", name, placeholder, value, onChange, style}) => {
+const Input = ({type = "text", name, placeholder, value, onChange, maxLength, style}) => {
     return(
         <input
             type={type}
@@ -6,14 +6,16 @@ const Input = ({type = "text", name, placeholder, value, onChange, style}) => {
             placeholder={placeholder}
             value={value}
             onChange={onChange}
+            maxLength={maxLength}
             style={{
-                boxSizing: "border-box", // ✅ 추가
+                boxSizing: "border-box",
                 width: "100%",
                 maxWidth: "300px",
                 padding: "10px",
                 marginBottom: "12px",
                 borderRadius: "4px",
                 border: "1px solid #ccc",
+                ...style
             }}
         />
     );

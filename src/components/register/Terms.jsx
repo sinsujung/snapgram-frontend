@@ -8,7 +8,7 @@ import axios from "axios";
 const Terms = () => {
 
     const navigate = useNavigate();
-    const [checkedItems, setCheckedItems] = useState({
+    const [termsItems, setTermsItems] = useState({
         all: false,
         terms: false,
         data: false,
@@ -20,6 +20,7 @@ const Terms = () => {
     useEffect(() => {
         // 회원가입 정보 불러오기
         const savedData = JSON.parse(localStorage.getItem("signupData"));
+
         if (savedData) {
             setSignupData(savedData);
         }
@@ -27,16 +28,16 @@ const Terms = () => {
 
     // 개별 체크박스 토글
     const toggleCheckbox = (key) => {
-        const updatedCheckedItems = { ...checkedItems, [key]: !checkedItems[key] };
+        const updatedCheckedItems = { ...termsItems, [key]: !termsItems[key] };
         updatedCheckedItems.all =
             updatedCheckedItems.terms && updatedCheckedItems.data && updatedCheckedItems.location;
-        setCheckedItems(updatedCheckedItems);
+        setTermsItems(updatedCheckedItems);
     };
 
     // "전체 동의" 체크 시 모든 항목 선택
     const toggleAll = () => {
-        const newState = !checkedItems.all;
-        setCheckedItems({
+        const newState = !termsItems.all;
+        setTermsItems({
             all: newState,
             terms: newState,
             data: newState,
@@ -57,42 +58,42 @@ const Terms = () => {
             is_agree: true,
         };
 
-        try {
-            const response = await axios.post("http://192.168.0.18:8080/api/user/signup", requestData);
-            console.log("회원가입 요청")
-            console.log(response);
-            const { code, message } = response.data;
-
-
-            if (code === 0) {
-                alert("회원가입이 완료되었습니다!");
-                navigate("/login");
-            } else {
-                handleError(code, message);
-            }
-        } catch (error) {
-            // 서버에서 에러 응답이 올 경우
-            if (error.response && error.response.data) {
-                const { code, message } = error.response.data;
-                handleError(code, message);
-            } else {
-                alert("서버가 응답하지 않습니다.");
-            }
-        }
-
         // try {
-        //     // Mock API 사용 (jsonplaceholder)
-        //     const response = await axios.post("https://jsonplaceholder.typicode.com/posts", requestData);
+        //     const response = await axios.post("http://192.168.0.18:8080/api/user/signup", requestData);
+        //     console.log("회원가입 요청")
+        //     console.log(response);
+        //     const { code, message } = response.data;
         //
-        //     if (response.status === 201) {
-        //         alert("회원가입이 완료되었습니다! (Mock API)");
-        //         navigate("/login"); // 메인 페이지로 이동
+        //
+        //     if (code === 0) {
+        //         alert("회원가입이 완료되었습니다!");
+        //         navigate("/login");
         //     } else {
-        //         alert("회원가입에 실패했습니다. (Mock API 응답 오류)");
+        //         handleError(code, message);
         //     }
         // } catch (error) {
-        //     alert("서버가 응답하지 않습니다. (Mock API 테스트)");
+        //     // 서버에서 에러 응답이 올 경우
+        //     if (error.response && error.response.data) {
+        //         const { code, message } = error.response.data;
+        //         handleError(code, message);
+        //     } else {
+        //         alert("서버가 응답하지 않습니다.");
+        //     }
         // }
+
+        try {
+            // Mock API 사용 (jsonplaceholder)
+            const response = await axios.post("https://jsonplaceholder.typicode.com/posts", requestData);
+
+            if (response.status === 201) {
+                alert("회원가입이 완료되었습니다! (Mock API)");
+                navigate("/login"); // 메인 페이지로 이동
+            } else {
+                alert("회원가입에 실패했습니다. (Mock API 응답 오류)");
+            }
+        } catch (error) {
+            alert("서버가 응답하지 않습니다. (Mock API 테스트)");
+        }
     };
 
     // 오류 메시지 처리
@@ -102,7 +103,7 @@ const Terms = () => {
 
     // 다음 버튼 클릭 시 모든 필수 약관 체크 확인
     const nextButtonClick = () => {
-        if (!checkedItems.terms || !checkedItems.data || !checkedItems.location) {
+        if (!termsItems.terms || !termsItems.data || !termsItems.location) {
             alert("모든 필수 약관에 동의해야 합니다.");
             return;
         }
@@ -121,7 +122,7 @@ const Terms = () => {
             <div className="terms-agree" onClick={toggleAll}>
                 <span>모든 약관에 동의</span>
                 <img
-                    src={checkedItems.all ? CheckboxChecked : CheckboxUnChecked}
+                    src={termsItems.all ? CheckboxChecked : CheckboxUnChecked}
                     alt="전체 동의 체크박스"
                     className="terms-checkbox"
                 />
@@ -134,7 +135,7 @@ const Terms = () => {
                 <div className="terms-item" onClick={() => toggleCheckbox("terms")}>
                     <span>이용 약관 (필수)</span>
                     <img
-                        src={checkedItems.terms ? CheckboxChecked : CheckboxUnChecked}
+                        src={termsItems.terms ? CheckboxChecked : CheckboxUnChecked}
                         alt="이용 약관 체크박스"
                         className="terms-checkbox"
                     />
@@ -142,7 +143,7 @@ const Terms = () => {
                 <div className="terms-item" onClick={() => toggleCheckbox("data")}>
                     <span>데이터 정책 (필수)</span>
                     <img
-                        src={checkedItems.data ? CheckboxChecked : CheckboxUnChecked}
+                        src={termsItems.data ? CheckboxChecked : CheckboxUnChecked}
                         alt="데이터 정책 체크박스"
                         className="terms-checkbox"
                     />
@@ -150,7 +151,7 @@ const Terms = () => {
                 <div className="terms-item" onClick={() => toggleCheckbox("location")}>
                     <span>위치 기반 기능 (필수)</span>
                     <img
-                        src={checkedItems.location ? CheckboxChecked : CheckboxUnChecked}
+                        src={termsItems.location ? CheckboxChecked : CheckboxUnChecked}
                         alt="위치 기반 기능 체크박스"
                         className="terms-checkbox"
                     />
