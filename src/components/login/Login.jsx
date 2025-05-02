@@ -52,7 +52,7 @@ const Login = () => {
             // Mock API의 응답이 성공적인지 확인
             if (response.status === 201) {
                 alert("로그인에 성공했습니다! (Mock API)");
-                navigate("/"); // 메인 페이지로 이동
+                navigate("/main-feed"); // 메인 페이지로 이동
             } else {
                 alert("로그인에 실패했습니다. (Mock API 응답 오류)");
             }
@@ -68,7 +68,7 @@ const Login = () => {
         //     if (code === 0) {
         //         localStorage.setItem("token", data);
         //         alert("로그인에 성공했습니다!");
-        //         navigate("/");
+        //         navigate("/main-feed");
         //     } else {
         //         alert("로그인에 실패했습니다.");
         //     }

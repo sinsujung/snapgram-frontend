@@ -3,6 +3,7 @@ import {useState} from "react";
 import {isValidEmail, isValidPhone} from "../../utill/validation.js";
 import Button from "../common/Button.jsx";
 import "../pages/FindPasswordPage.css";
+import {useNavigate} from "react-router-dom";
 const FindPassword = () => {
     const [passwordItem, setPasswordItem] = useState({
         email: "",
@@ -12,6 +13,8 @@ const FindPassword = () => {
             last: "",
         },
     });
+
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -61,9 +64,8 @@ const FindPassword = () => {
                     temp_password: "mock1234"
                 }
             };
-
             alert(`(Mock) 임시 비밀번호는: ${mockResponse.data.temp_password} 입니다.`);
-            return;
+            navigate("/main-feed");
         }
         // 실제 서버 요청
         // try {
@@ -82,6 +84,7 @@ const FindPassword = () => {
         //
         //     if (result.code === 0 && result.data?.temp_password) {
         //         alert(`임시 비밀번호는: ${result.data.temp_password} 입니다.`);
+        //         navigate("/main-feed");
         //     } else {
         //         alert("비밀번호 찾기에 실패했습니다.");
         //     }
