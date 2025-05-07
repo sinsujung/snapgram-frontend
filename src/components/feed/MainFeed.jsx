@@ -2,6 +2,8 @@ import Search from "../common/Search.jsx";
 import {useState} from "react";
 import DefaultProfileImage from "../../assets/non-profile.svg";
 import "../pages/MainFeedPage.css";
+import {useNavigate} from "react-router-dom";
+
 const MainFeed = () => {
 
     //예시 데이터
@@ -12,6 +14,8 @@ const MainFeed = () => {
 
     //실제 데이터
     const [users, setUsers] = useState([]);
+
+    const navigate = useNavigate();
 
     const fetchSearchUsers = async(query) => {
         console.log("검색어:", query);
@@ -49,7 +53,8 @@ const MainFeed = () => {
             <ul className="search-results">
                 {users && users.length > 0 ? (
                     users.map((user) => (
-                        <li key={user.id}>
+                        <li key={user.id}
+                        onClick={() => navigate(`/user-feed/${user.id}`)}>
                             <img
                                 src={user.profile_image_url || DefaultProfileImage}
                                 style={{ width: "40px", height: "40px", borderRadius: "50%" }}
