@@ -42,44 +42,29 @@ const Login = () => {
         const requestData = {
             email: email,
             password: password,
-            // email,
-            // password,
         };
+
         try {
-            // Mock API를 사용한 로그인 테스트
-            const response = await axios.post("https://jsonplaceholder.typicode.com/posts", requestData);
+            const response = await axios.post("http://192.168.0.18:8080/api/user/login", requestData);
+            const { code, data } = response.data;
 
-            // Mock API의 응답이 성공적인지 확인
-            if (response.status === 201) {
-                alert("로그인에 성공했습니다! (Mock API)");
-                navigate("/main-feed"); // 메인 페이지로 이동
+            if (code === 0) {
+                console.log(data);
+                localStorage.setItem("token", data);
+
+                alert("로그인에 성공했습니다!");
+                navigate("/main-feed");
             } else {
-                alert("로그인에 실패했습니다. (Mock API 응답 오류)");
+                alert("로그인에 실패했습니다.");
             }
-
         } catch (error) {
-            alert("서버가 응답하지 않습니다. (Mock API 테스트)");
+            if (error.response && error.response.data) {
+                const { code, message } = error.response.data;
+                alert(message || `오류 발생 (코드: ${code})`);
+            } else {
+                alert("서버가 응답하지 않습니다.");
+            }
         }
-
-        // try {
-        //     const response = await axios.post("http://192.168.0.18:8080/api/user/login", requestData);
-        //     const { code, data } = response.data;
-        //
-        //     if (code === 0) {
-        //         localStorage.setItem("token", data);
-        //         alert("로그인에 성공했습니다!");
-        //         navigate("/main-feed");
-        //     } else {
-        //         alert("로그인에 실패했습니다.");
-        //     }
-        // } catch (error) {
-        //     if (error.response && error.response.data) {
-        //         const { code, message } = error.response.data;
-        //         alert(message || `오류 발생 (코드: ${code})`);
-        //     } else {
-        //         alert("서버가 응답하지 않습니다.");
-        //     }
-        // }
     };
 
     return (

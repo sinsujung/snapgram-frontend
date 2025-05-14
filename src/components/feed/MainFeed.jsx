@@ -3,14 +3,11 @@ import {useState} from "react";
 import DefaultProfileImage from "../../assets/non-profile.svg";
 import "../pages/MainFeedPage.css";
 import {useNavigate} from "react-router-dom";
+import axios from "axios";
 
 const MainFeed = () => {
 
-    //예시 데이터
-    const mockUsers = [
-        {id:1, username: "suding", nickname: "김수댕", profile_image_url:DefaultProfileImage},
-        {id:2, username: "jidang", nickname: "김지댕", profile_image_url:DefaultProfileImage},
-    ]
+    const token = localStorage.getItem("token");
 
     //실제 데이터
     const [users, setUsers] = useState([]);
@@ -25,27 +22,25 @@ const MainFeed = () => {
             return;
         }
 
-        //테스트
-        const filtered = mockUsers.filter((user) =>
-            user.username.toLowerCase().includes(query.toLowerCase()) ||
-            user.nickname.toLowerCase().includes(query.toLowerCase())
-        );
-        setUsers(filtered);
-        console.log("검색 결과:", filtered);
         //실제 api 서버 연동
-        // try {
-        //     const response = await fetch(`/api/user/search?name=${encodeURIComponent(query)}`);
-        //     const result = await response.json();
-        //
-        //     if (result.code === 0 && result.data?.users) {
-        //         setUsers(result.data.users);
-        //     } else {
-        //         setUsers([]);
-        //     }
-        // } catch (error) {
-        //     console.error("검색 오류: ", error);
-        //     setUsers([]);
-        // }
+        try {
+            const response = await axios.get(`http://192.168.0.18:8080/api/user/search`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const {code, data} = response.data;
+
+            if (code === 0) {
+                const uniqueUsers = Array.from(new Map(data.users.map(user => [user.id, user])).values());
+                setUsers(uniqueUsers);
+            } else {
+                setUsers([]);
+            }
+        } catch (error) {
+            console.error("검색 오류: ", error);
+            setUsers([]);
+        }
     };
     return(
         <div>
@@ -56,10 +51,11 @@ const MainFeed = () => {
                         <li key={user.id}
                         onClick={() => navigate(`/user-feed/${user.id}`)}>
                             <img
-                                src={user.profile_image_url || DefaultProfileImage}
+                                src={user.profile_image_url ? user.profile_image_url : DefaultProfileImage}
+                                alt={`${user.name}의 프로필`}
                                 style={{ width: "40px", height: "40px", borderRadius: "50%" }}
                             />
-                            <span>{user.username} ({user.nickname})</span>
+                            <span>{user.name} ({user.nickname})</span>
                         </li>
                     ))
                 ) : (

@@ -58,42 +58,42 @@ const Terms = () => {
             is_agree: true,
         };
 
-        // try {
-        //     const response = await axios.post("http://192.168.0.18:8080/api/user/signup", requestData);
-        //     console.log("회원가입 요청")
-        //     console.log(response);
-        //     const { code, message } = response.data;
-        //
-        //
-        //     if (code === 0) {
-        //         alert("회원가입이 완료되었습니다!");
-        //         navigate("/login");
-        //     } else {
-        //         handleError(code, message);
-        //     }
-        // } catch (error) {
-        //     // 서버에서 에러 응답이 올 경우
-        //     if (error.response && error.response.data) {
-        //         const { code, message } = error.response.data;
-        //         handleError(code, message);
-        //     } else {
-        //         alert("서버가 응답하지 않습니다.");
-        //     }
-        // }
-
         try {
-            // Mock API 사용 (jsonplaceholder)
-            const response = await axios.post("https://jsonplaceholder.typicode.com/posts", requestData);
+            const response = await axios.post("http://192.168.0.18:8080/api/user/signup", requestData);
+            console.log("회원가입 요청")
+            console.log(response);
+            const { code, message } = response.data;
 
-            if (response.status === 201) {
-                alert("회원가입이 완료되었습니다! (Mock API)");
-                navigate("/login"); // 메인 페이지로 이동
+
+            if (code === 0) {
+                alert("회원가입이 완료되었습니다!");
+                navigate("/login");
             } else {
-                alert("회원가입에 실패했습니다. (Mock API 응답 오류)");
+                handleError(code, message);
             }
         } catch (error) {
-            alert("서버가 응답하지 않습니다. (Mock API 테스트)");
+            // 서버에서 에러 응답이 올 경우
+            if (error.response && error.response.data) {
+                const { code, message } = error.response.data;
+                handleError(code, message);
+            } else {
+                alert("서버가 응답하지 않습니다.");
+            }
         }
+
+    //     try {
+    //         // Mock API 사용 (jsonplaceholder)
+    //         const response = await axios.post("https://jsonplaceholder.typicode.com/posts", requestData);
+    //
+    //         if (response.status === 201) {
+    //             alert("회원가입이 완료되었습니다! (Mock API)");
+    //             navigate("/login"); // 메인 페이지로 이동
+    //         } else {
+    //             alert("회원가입에 실패했습니다. (Mock API 응답 오류)");
+    //         }
+    //     } catch (error) {
+    //         alert("서버가 응답하지 않습니다. (Mock API 테스트)");
+    //     }
     };
 
     // 오류 메시지 처리

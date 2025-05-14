@@ -4,6 +4,7 @@ import {isValidEmail, isValidPhone} from "../../utill/validation.js";
 import Button from "../common/Button.jsx";
 import "../pages/FindPasswordPage.css";
 import {useNavigate} from "react-router-dom";
+import axios from "axios";
 const FindPassword = () => {
     const [passwordItem, setPasswordItem] = useState({
         email: "",
@@ -54,44 +55,26 @@ const FindPassword = () => {
             return;
         }
 
-        // 테스트용
-        const isMockMode = true;
-
-        if (isMockMode) {
-            const mockResponse = {
-                code: 0,
-                data: {
-                    temp_password: "mock1234"
-                }
-            };
-            alert(`(Mock) 임시 비밀번호는: ${mockResponse.data.temp_password} 입니다.`);
-            navigate("/main-feed");
-        }
         // 실제 서버 요청
-        // try {
-        //     const response = await fetch("/api/user/find_password", {
-        //         method: "POST",
-        //         headers: {
-        //             "Content-Type": "application/json",
-        //         },
-        //         body: JSON.stringify({
-        //             email,
-        //             phone: fullPhone,
-        //         }),
-        //     });
-        //
-        //     const result = await response.json();
-        //
-        //     if (result.code === 0 && result.data?.temp_password) {
-        //         alert(`임시 비밀번호는: ${result.data.temp_password} 입니다.`);
-        //         navigate("/main-feed");
-        //     } else {
-        //         alert("비밀번호 찾기에 실패했습니다.");
-        //     }
-        // } catch (error) {
-        //     console.error(error);
-        //     alert("서버에 오류가 발생했습니다.");
-        // }
+        try {
+
+            const response = await axios.post("/api/user/find_password", passwordItem);
+            const {code, data} = response.data;
+
+            if (code === 0) {
+                alert(`임시 비밀번호는: ${data.temp_password} 입니다.`);
+                navigate("/login");
+            } else {
+                alert("비밀번호 찾기에 실패했습니다.");
+            }
+        } catch (error) {
+            if (error.response && error.response.data) {
+                const {code, message} = error.response.data;
+                alert(message || `오류 발생 (코드: ${code})`);
+            } else {
+                alert("서버가 응답하지 않습니다.")
+            }
+        }
     };
 
     return (
