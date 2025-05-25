@@ -10,9 +10,9 @@ const UserFeed = () => {
     const [userData, setUserData ] = useState(null);
 
     const token = localStorage.getItem("token");
-
+    const [posts, setPosts] = useState([]);
     const requestData = {
-        targetUserId: userData,
+        user_id: userData?.id,
     }
 
     const handleFollow = async () => {
@@ -23,7 +23,7 @@ const UserFeed = () => {
                             Authorization: `Bearer ${token}`
                         }
                 });
-            const {code} = response.data;
+            const {code, data} = response.data;
             if (code === 0) {
                 alert("follow success");
                 setUserData(data.user);
@@ -42,8 +42,9 @@ const UserFeed = () => {
                 const response = await axios.get(`http://192.168.0.18:8080/api/user/profile?user_id=${id}`);
                 const {code, data} = response.data;
 
-                if (result.code === 0) {
+                if (code === 0) {
                     setUserData(data.user);
+                    setPosts(data.user.posts || []);
                 }
             } catch (error) {
                 console.log("피드 로딩 실패", error);
