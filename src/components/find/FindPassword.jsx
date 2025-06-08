@@ -55,6 +55,19 @@ const FindPassword = () => {
             return;
         }
 
+        // 테스트용
+        // const isMockMode = true;
+        //
+        // if (isMockMode) {
+        //     const mockResponse = {
+        //         code: 0,
+        //         data: {
+        //             temp_password: "mock1234"
+        //         }
+        //     };
+        //     alert(`(Mock) 임시 비밀번호는: ${mockResponse.data.temp_password} 입니다.`);
+        //     navigate("/main-feed");
+        // }
         // 실제 서버 요청
         try {
 
