@@ -16,7 +16,7 @@ const MainFeed = () => {
 
     const fetchSearchUsers = async(query) => {
         console.log("검색어:", query);
-
+        console.log(token);
         if (!query) {
             setUsers([]);
             return;
@@ -30,6 +30,7 @@ const MainFeed = () => {
                     Authorization: `Bearer ${token}`
                 }
             });
+            console.log(token);
             const {code, data} = response.data;
 
             if (code === 0) {

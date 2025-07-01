@@ -51,6 +51,7 @@ const Login = () => {
             if (code === 0) {
                 console.log(data);
                 localStorage.setItem("token", data);
+                // localStorage.setItem("userId", data.id);
 
                 alert("로그인에 성공했습니다!");
                 navigate("/main-feed");

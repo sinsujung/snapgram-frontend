@@ -6,6 +6,7 @@ import LoginPage from "./components/pages/LoginPage.jsx";
 import FindPasswordPage from "./components/pages/FindPasswordPage.jsx";
 import MainFeedPage from "./components/pages/MainFeedPage.jsx";
 import UserFeedPage from "./components/pages/UserFeedPage.jsx";
+import BoardWrite from "./components/board/BoardWrite.jsx";
 
 function App() {
     return (
@@ -17,6 +18,7 @@ function App() {
                 <Route path="/find-password" element={<FindPasswordPage/>} />
                 <Route path="/main-feed" element={<MainFeedPage />} />
                 <Route path="/user-feed/:id" element={<UserFeedPage />}/>
+                <Route path="/post" element={<BoardWrite />}/>
             </Routes>
         </Router>
     );
