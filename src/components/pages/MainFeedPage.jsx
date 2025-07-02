@@ -1,6 +1,8 @@
 import "./MainFeedPage.css";
 import {useNavigate} from "react-router-dom";
-import MainFeed from "../feed/MainFeed.jsx";
+import MainFeedSearch from "../feed/MainFeedSearch.jsx";
+import MainFeedPost from "../feed/MainFeedPost.jsx";
+import Header from "../common/Header.jsx";
 
 const MainFeedPage = () => {
     const navigate = useNavigate();
@@ -8,7 +10,8 @@ const MainFeedPage = () => {
 
     return (
         <div className="main-feed-page">
-            <MainFeed />
+            <MainFeedSearch />
+            <MainFeedPost />
         </div>
     );
 

@@ -131,7 +131,7 @@ const UserFeed = () => {
                 <p>팔로잉: {userData.following_count}</p>
                 <p>팔로워: {userData.follower_count}</p>
                 <div style={{ display: "flex", gap: "10px", marginLeft: "33px"}}>
-                    <Button onClick= {handleFollow} text={isFollowing ? "unfollow" : "follow"} style={{width: "90px"}}/>
+                    {loggedInUserId !== userData.id.toString() && <Button onClick= {handleFollow} text={isFollowing ? "unfollow" : "follow"} style={{width: "90px"}}/>}
                     {loggedInUserId === userData.id.toString() && <Button onClick= {handleWrite} text={"게시물 작성"} style={{width: "90px"}}/>}
                 </div>
                 <p>{userData.posts}</p>
