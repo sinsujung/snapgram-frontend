@@ -11,6 +11,7 @@ const UserFeed = () => {
     const token = localStorage.getItem("token");
     const [posts, setPosts] = useState([]);
     const [isFollowing, setIsFollowing] = useState(false);
+    // const [isLike, setIsLike] = useState(false);
     const loggedInUserId = localStorage.getItem("userId");
     const navigate = useNavigate();
     // const requestData = {
@@ -106,7 +107,8 @@ const UserFeed = () => {
                 if (code === 0) {
                     setUserData(data.user);
                     setPosts(data.posts || []);
-                    // setIsFollowing(data.user.is_following); // following 상태 백엔드 서버에서 받을 수 있게 api 정보 바꾸기
+                    setIsFollowing(data.user.is_following); // following 상태 백엔드 서버에서 받을 수 있게 api 정보 바꾸기
+                    // setIsLike(data.user.is_like);
                 }
             } catch (error) {
                 console.log("피드 로딩 실패", error);
