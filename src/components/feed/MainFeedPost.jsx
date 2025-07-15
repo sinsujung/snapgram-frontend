@@ -24,7 +24,7 @@ const MainFeedPost = () => {
             } catch (error) {
                 console.error("피드 불러오기 오류: ", error);
 
-                // 🔧 임시 더미 데이터 설정
+                // 임시 더미 데이터 설정
                 // setPosts([
                 //     {
                 //         id: 1,
