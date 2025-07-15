@@ -58,10 +58,10 @@ const UserFeed = () => {
                 });
 
                 if (response.data.code === 0) {
-                    alert("언팔로우 완료");
+                    alert("unfollow!");
                     setIsFollowing(false);
                 } else {
-                    alert("언팔로우 실패");
+                    alert("unfollow failed!");
                 }
             } else {
                 // 팔로우
@@ -76,10 +76,10 @@ const UserFeed = () => {
                 );
 
                 if (response.data.code === 0) {
-                    alert("팔로우 완료");
+                    alert("follow complete!");
                     setIsFollowing(true);
                 } else {
-                    alert("팔로우 실패");
+                    alert("follow failed!");
                 }
             }
         } catch (error) {
