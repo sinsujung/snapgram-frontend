@@ -59,7 +59,7 @@ const Terms = () => {
         };
 
         try {
-            const response = await axios.post("http://192.168.0.18:8080/api/user/signup", requestData);
+            const response = await axios.post("http://192.168.219.105:8080/api/user/signup", requestData);
             console.log("회원가입 요청")
             console.log(response);
             const { code, message } = response.data;

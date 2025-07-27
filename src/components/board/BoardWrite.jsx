@@ -1,5 +1,6 @@
 import Input from "../common/Input";
 import Button from "../common/Button";
+import { useNavigate } from "react-router-dom";
 import "../pages/BoardWritePage.css";
 import PlusImage from "../../assets/plus-image.svg";
 import UploadBoard from "../../assets/upload.svg";
@@ -12,7 +13,7 @@ const BoardWrite = () => {
     const [imageFile, setImageFile] = useState(null);
     const [content, setContent] = useState("");
     const token = localStorage.getItem("token");
-    
+    const navigate = useNavigate();
     const handleFileChange = (e) => {
         const img = e.target.files[0];
         if(!img) return;
@@ -23,7 +24,9 @@ const BoardWrite = () => {
     };
 
     const handleUpload = async () => {
-        const formData = new FormData();
+        console.log("content : " + content);
+        console.log("image_url : " + imageFile.name);
+        // const formData = new FormData();
 
         // console.log("📤 content:", content);
         // console.log("📷 imageFile:", imageFile);
@@ -36,14 +39,18 @@ const BoardWrite = () => {
             content: content,
             image_url: imageFile.name
         }
+
+        console.log("2");
         // formData.append("content", content);
         // if (imageFile) {
         //     formData.append("image_url", imageFile.name);
         // }
         // console.log(formData);
-        
+
+        // 192.168.0.18:8080
         try {
-            const response = await axios.post("http://192.168.0.18:8080/api/post", requestData, {
+            console.log("3")
+            const response = await axios.post("http://192.168.219.105:8080/api/post", requestData, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 },
@@ -52,14 +59,16 @@ const BoardWrite = () => {
             console.log("게시물 작성");
             
             const { code, message } = response.data;
-            
+
+            console.log("code : " + code);
             if (code === 0) {
                 alert("게시글 업로드 완료!");
-                navigator("/main-feed");
+                navigate("/main-feed");
             } else {
                 handleError(code, message);
             }
         } catch (error) {
+            console.log(error);
             if (error.response && error.response.data) {
                 const { code, message } = error.response.data;
                 handleError(code, message);

@@ -34,9 +34,12 @@ const MainFeedPost = () => {
         if (isCurrentlyLiked) {
             console.log("likeClickHandler called", isCurrentlyLiked);
             // 좋아요 취소
-            const response = await axios.delete(`http://192.168.0.18:8080/api/post/like/${post_id}`, {
+            const response = await axios.post(`http://192.168.219.105:8080/api/like`,
+                {post_id: post_id},
+                {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json"
                 }
             });
 
@@ -71,13 +74,16 @@ const MainFeedPost = () => {
             }
         } else {
             // 좋아요
+            console.log(post_id);
             const response = await axios.post(
-               `http://192.168.0.18:8080/api/post/like/${post_id}`,{},
-               {
+               `http://192.168.219.105:8080/api/like`,{
+                post_id: post_id},
+                {
                     headers: {
-                        Authorization: `Bearer ${token}`
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json"
                     }
-               }
+                }
             );
 
             if (response.data.code === 0) {
@@ -148,9 +154,10 @@ const MainFeedPost = () => {
             }
         ]);
 
+        // 192.168.0.18:8080
         const fetchPosts = async () => {
             try {
-                const response = await axios.get("http://192.168.0.18:8080/api/post", {
+                const response = await axios.get("http://192.168.219.105:8080/api/post", {
                     params: { page: 1, size: 10 },
                     headers: {
                         Authorization: `Bearer ${token}` },

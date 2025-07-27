@@ -18,40 +18,14 @@ const UserFeed = () => {
     //     user_id: userData?.id,
     // }
 
-    // 가상 데이터
-//     const mockPosts = [
-//   { id: 1, image_url: "https://via.placeholder.com/200?text=Post+1" },
-//   { id: 2, image_url: "https://via.placeholder.com/200?text=Post+2" },
-//   { id: 3, image_url: "https://via.placeholder.com/200?text=Post+3" },
-// ];
-//
-//   const mockUser = {
-//     id: 1,
-//     profile_image_url: "https://via.placeholder.com/100",
-//     name: "홍길동",
-//     nickname: "hong",
-//     post_count: 5,
-//     following_count: 10,
-//     follower_count: 15,
-//     is_following: false,
-//   };
-//
-//     useEffect(() => {
-//     setUserData(mockUser);
-//     setPosts(mockPosts);
-//     setIsFollowing(mockUser.is_following);
-//   }, [id]);
-//
-//
-  // 위까지
-
     const handleFollow = async () => {
         if (!userData) return;
 
+        // 192.168.0.18
         try {
             if (isFollowing) {
                 // 언팔
-                const response = await axios.delete(`http://192.168.0.18:8080/api/follow?user_id=${userData.id}`, {
+                const response = await axios.delete(`http://192.168.219.105:8080/api/follow?user_id=${userData.id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -66,7 +40,7 @@ const UserFeed = () => {
             } else {
                 // 팔로우
                 const response = await axios.post(
-                    "http://192.168.0.18:8080/api/follow",
+                    "http://192.168.219.105:8080/api/follow",
                     { user_id: userData.id },
                     {
                         headers: {
@@ -97,7 +71,7 @@ const UserFeed = () => {
     useEffect(() => {
         const handleUserFeed = async () => {
             try {
-                const response = await axios.get(`http://192.168.0.18:8080/api/user/profile?user_id=${id}`,
+                const response = await axios.get(`http://192.168.219.105:8080/api/user/profile?user_id=${id}`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`}
