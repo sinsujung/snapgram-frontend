@@ -32,9 +32,8 @@ const MainFeedPost = () => {
 
     try {
         if (isCurrentlyLiked) {
-            console.log("likeClickHandler called", isCurrentlyLiked);
             // 좋아요 취소
-            const response = await axios.post(`http://192.168.219.105:8080/api/like`,
+            const response = await axios.post(`http://192.168.0.11:8080/api/like`,
                 {post_id: post_id},
                 {
                 headers: {
@@ -42,8 +41,6 @@ const MainFeedPost = () => {
                     "Content-Type": "application/json"
                 }
             });
-
-            console.log("좋아요 등록 응답:", response.data);
             if (response.data.code === 0) {
                 alert("cancel liked!");
                  // 좋아요 수 감소 (실제)
@@ -55,20 +52,6 @@ const MainFeedPost = () => {
                     )
                 );
 
-                // 테스트용
-                // setPosts((prevPosts) =>
-                //         prevPosts.map((p) =>
-                //             p.id === post_id
-                //                 ? {
-                //                     ...p,
-                //                     is_like: !isCurrentlyLiked,
-                //                     like_count: isCurrentlyLiked
-                //                         ? p.like_count - 1
-                //                         : p.like_count + 1,
-                //                 }
-                //                 : p
-                //         )
-                // );
             } else {
                 alert("cancel liked failed!");
             }
@@ -76,7 +59,7 @@ const MainFeedPost = () => {
             // 좋아요
             console.log(post_id);
             const response = await axios.post(
-               `http://192.168.219.105:8080/api/like`,{
+               `http://192.168.0.11:8080/api/like`,{
                 post_id: post_id},
                 {
                     headers: {
@@ -96,20 +79,6 @@ const MainFeedPost = () => {
                             : p
                     )
                 );
-                // 👉 개발용: 좋아요 상태 반전 및 수 변경 (UI 테스트용)
-                    // setPosts((prevPosts) =>
-                    //     prevPosts.map((p) =>
-                    //         p.id === post_id
-                    //             ? {
-                    //                 ...p,
-                    //                 is_like: !isCurrentlyLiked,
-                    //                 like_count: isCurrentlyLiked
-                    //                     ? p.like_count - 1
-                    //                     : p.like_count + 1,
-                    //             }
-                    //             : p
-                    //     )
-                    // );
             } else {
                 alert("complete liked failed!");
             }
@@ -157,7 +126,7 @@ const MainFeedPost = () => {
         // 192.168.0.18:8080
         const fetchPosts = async () => {
             try {
-                const response = await axios.get("http://192.168.219.105:8080/api/post", {
+                const response = await axios.get("http://192.168.0.11:8080/api/post", {
                     params: { page: 1, size: 10 },
                     headers: {
                         Authorization: `Bearer ${token}` },
@@ -186,8 +155,8 @@ const MainFeedPost = () => {
                     <img src={post.image_url ? post.image_url : DefaultProfileImage} alt="post" style={{ width: "300px", height: "250px", marginTop: "20px", marginBottom: "20px"}} />
                     <p style={{color: "white"}}>{post.content}</p>
                     <div style={{color: "white"}}>
-                        <div onClick={() => likeClickHandler(post)}><img src={post.is_like ? IsLiked : IsNotLiked} alt="like" className="isLiked"/></div>
-                        {post.like_count}· 💬 {post.comment_count}
+                        <div onClick={() => likeClickHandler(post)}><img src={post.is_like ? IsLiked : IsNotLiked} alt="like" className="isLiked"/>{post.like_count}</div>
+                        <div>💬 {post.comment_count} 댓글보기</div>
                     </div>
                 </div>
             ))}

@@ -24,7 +24,7 @@ const MainFeedSearch = () => {
         // 192.168.0.18
         //실제 api 서버 연동
         try {
-            const response = await axios.get(`http://192.168.219.105:8080/api/user/search`, {
+            const response = await axios.get(`http://192.168.0.11:8080/api/user/search`, {
                 params: { query },
                 headers: {
                     Authorization: `Bearer ${token}`
