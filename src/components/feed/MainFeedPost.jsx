@@ -4,7 +4,7 @@ import DefaultProfileImage from "../../assets/non-profile.svg";
 import IsLiked from "../../assets/liked.svg";
 import IsNotLiked from "../../assets/unliked.svg";
 import { useEffect, useState } from "react";
-import CommentPopup from "./CommentPopup";
+import CommentPopup from "./CommentPopup.jsx";
 
 const MainFeedPost = () => {
     const [userData, setUserData ] = useState(null);
@@ -199,7 +199,7 @@ const MainFeedPost = () => {
             </div>
 
             {selectedPostId && (
-                <CommentPopup post_Id={selectedPostId}
+                <CommentPopup post_id={selectedPostId}
                     onClose={() => setSelectedPostId(null)}/>
             )}
         </>
