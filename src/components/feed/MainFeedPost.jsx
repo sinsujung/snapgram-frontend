@@ -4,6 +4,7 @@ import DefaultProfileImage from "../../assets/non-profile.svg";
 import IsLiked from "../../assets/liked.svg";
 import IsNotLiked from "../../assets/unliked.svg";
 import { useEffect, useState } from "react";
+import CommentPopup from "./CommentPopup";
 
 const MainFeedPost = () => {
     const [userData, setUserData ] = useState(null);
@@ -12,6 +13,11 @@ const MainFeedPost = () => {
     const [posts, setPosts] = useState([]);
     const loggedInUserId = localStorage.getItem("userId");
 
+    const [selectedPostId, setSelectedPostId] = useState(null);
+
+    const handleCommentPopup = (post) => {
+        setSelectedPostId(post.id);
+    };
     // 좋아요 갯수 상태
     // const [isLikedCount, setIsLikedCount] = useState(false);
 
@@ -25,70 +31,70 @@ const MainFeedPost = () => {
     };
 
     const likeClickHandler = async(posts) => {
-    const post_id = posts.id;
-    const isCurrentlyLiked = posts.is_like;
+        const post_id = posts.id;
+        const isCurrentlyLiked = posts.is_like;
 
-    // if(!userData) return;
+        // if(!userData) return;
 
-    try {
-        if (isCurrentlyLiked) {
-            // 좋아요 취소
-            const response = await axios.post(`http://192.168.0.11:8080/api/like`,
-                {post_id: post_id},
-                {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json"
-                }
-            });
-            if (response.data.code === 0) {
-                alert("cancel liked!");
-                 // 좋아요 수 감소 (실제)
-                setPosts((prevPosts) =>
-                    prevPosts.map((p) =>
-                        p.id === post_id
-                            ? { ...p, is_like: false, like_count: p.like_count - 1 }
-                            : p
-                    )
-                );
-
-            } else {
-                alert("cancel liked failed!");
-            }
-        } else {
-            // 좋아요
-            console.log(post_id);
-            const response = await axios.post(
-               `http://192.168.0.11:8080/api/like`,{
-                post_id: post_id},
-                {
+        try {
+            if (isCurrentlyLiked) {
+                // 좋아요 취소
+                const response = await axios.post(`http://192.168.0.11:8080/api/like`,
+                    {post_id: post_id},
+                    {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "application/json"
                     }
-                }
-            );
+                });
+                if (response.data.code === 0) {
+                    alert("cancel liked!");
+                     // 좋아요 수 감소 (실제)
+                    setPosts((prevPosts) =>
+                        prevPosts.map((p) =>
+                            p.id === post_id
+                                ? { ...p, is_like: false, like_count: p.like_count - 1 }
+                                : p
+                        )
+                    );
 
-            if (response.data.code === 0) {
-                alert("complete liked!");
-                // 좋아요 수 증가
-                setPosts((prevPosts) =>
-                    prevPosts.map((p) =>
-                        p.id === post_id
-                            ? { ...p, is_like: true, like_count: p.like_count + 1 }
-                            : p
-                    )
-                );
+                } else {
+                    alert("cancel liked failed!");
+                }
             } else {
-                alert("complete liked failed!");
+                // 좋아요
+                console.log(post_id);
+                const response = await axios.post(
+                   `http://192.168.0.11:8080/api/like`,{
+                    post_id: post_id},
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            "Content-Type": "application/json"
+                        }
+                    }
+                );
+
+                if (response.data.code === 0) {
+                    alert("complete liked!");
+                    // 좋아요 수 증가
+                    setPosts((prevPosts) =>
+                        prevPosts.map((p) =>
+                            p.id === post_id
+                                ? { ...p, is_like: true, like_count: p.like_count + 1 }
+                                : p
+                        )
+                    );
+                } else {
+                    alert("complete liked failed!");
+                }
             }
+        } catch (error) {
+            console.error("좋아요 실패", error);
+            alert("좋아요 실패!");
         }
-    } catch (error) {
-        console.error("좋아요 실패", error);
-        alert("좋아요 실패!");
-    }
-};
-    useEffect(() => {  
+    };
+    useEffect(() => {
 
         setPosts([
             {
@@ -146,22 +152,59 @@ const MainFeedPost = () => {
     }, [token]);
 
     return (
-        <div className="post-style">
-            {posts.map((post) => (
-                <div key={post.id} style={{ borderBottom: "1px solid #ccc", padding: "10px" }}>
-                    <div className="post-nickName">
-                        <p style={{color: "white", cursor: "pointer"}} onClick={() => handleNickNameClick(post)}><strong>@{post.user.username}</strong></p>
+        <>
+            <div className="post-style">
+                {posts.map((post) => (
+                    <div key={post.id} style={{ borderBottom: "1px solid #ccc", padding: "10px" }}>
+                        <div className="post-nickName">
+                            <p
+                                style={{ color: "white", cursor: "pointer" }}
+                                onClick={() => handleNickNameClick(post)}
+                            >
+                                <strong>@{post.user.username}</strong>
+                            </p>
+                        </div>
+
+                        <img
+                            src={post.image_url ? post.image_url : DefaultProfileImage}
+                            alt="post"
+                            style={{
+                                width: "300px",
+                                height: "250px",
+                                marginTop: "20px",
+                                marginBottom: "20px"
+                            }}
+                        />
+
+                        <p style={{ color: "white" }}>{post.content}</p>
+
+                        <div style={{ color: "white" }}>
+                            <div onClick={() => likeClickHandler(post)} style={{ cursor: "pointer" }}>
+                                <img
+                                    src={post.is_like ? IsLiked : IsNotLiked}
+                                    alt="like"
+                                    className="isLiked"
+                                />
+                                {post.like_count}
+                            </div>
+
+                            <div>
+                                <p style={{ cursor: "pointer" }} onClick={() => handleCommentPopup(post)}>
+                                    💬 {post.comment_count} 댓글보기
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                    <img src={post.image_url ? post.image_url : DefaultProfileImage} alt="post" style={{ width: "300px", height: "250px", marginTop: "20px", marginBottom: "20px"}} />
-                    <p style={{color: "white"}}>{post.content}</p>
-                    <div style={{color: "white"}}>
-                        <div onClick={() => likeClickHandler(post)}><img src={post.is_like ? IsLiked : IsNotLiked} alt="like" className="isLiked"/>{post.like_count}</div>
-                        <div>💬 {post.comment_count} 댓글보기</div>
-                    </div>
-                </div>
-            ))}
-        </div>
+                ))}
+            </div>
+
+            {selectedPostId && (
+                <CommentPopup post_Id={selectedPostId}
+                    onClose={() => setSelectedPostId(null)}/>
+            )}
+        </>
     );
+
 };
 
 export default MainFeedPost;
