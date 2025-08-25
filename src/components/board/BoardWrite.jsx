@@ -50,7 +50,7 @@ const BoardWrite = () => {
         // 192.168.0.18:8080
         try {
             console.log("3")
-            const response = await axios.post("http://192.168.0.11:8080/api/post", requestData, {
+            const response = await axios.post("http://192.168.0.7:8080/api/post", requestData, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 },

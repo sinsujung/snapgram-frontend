@@ -71,7 +71,7 @@ const FindPassword = () => {
         // 실제 서버 요청
         try {
 
-            const response = await axios.post("http://192.168.0.11:8080/api/user/find_password", passwordItem);
+            const response = await axios.post("http://192.168.0.7:8080/api/user/find_password", passwordItem);
             const {code, data} = response.data;
 
             if (code === 0) {

@@ -6,18 +6,17 @@ const CommentPopup = ({ post_id, onClose }) => {
     const [comments, setComments] = useState([]);
     const [input, setInput] = useState("");
     const token = localStorage.getItem("token");
-
     const fetchComments = async () => {
         try {
-            const res = await axios.get(`http://192.168.0.11:8080/api/post/comment/${post_id}`, {
+            const res = await axios.get(`http://192.168.0.7:8080/api/comment/${post_id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json"
                 }
-            });
 
+            });
             if (res.data.code === 0) {
-                setComments(res.data.comments.content);
+                setComments(res.data.data.comments);
+
             }
         } catch (error) {
             console.error("댓글 불러오기 실패:", error);
@@ -25,19 +24,25 @@ const CommentPopup = ({ post_id, onClose }) => {
     };
 
     const handleSubmit = async () => {
-        console.log("token:", token);
-        console.log("입력 내용:", input);
+        // const userId = localStorage.getItem("userId");
+        console.log(post_id, input)
+        const requestData = {
+            post_id: post_id,
+            content: input
+        }
 
         try {
-            const res = await axios.post(
-                `http://192.168.0.11:8080/api/comment/${post_id}`,
-                { content: input },
-                { headers: {
+            const response = await axios.post(
+                `http://192.168.0.7:8080/api/comment/${post_id}`, requestData, {
+                    headers: {
                         Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json"
                     }
                 });
-            if (res.data.code === 0) {
+
+            console.log("댓글등록");
+
+            const { code } = response.data;
+            if (code === 0) {
                 setInput("");         // 입력창 비우기
                 fetchComments();      // 댓글 다시 불러오기
             }
@@ -50,7 +55,7 @@ const CommentPopup = ({ post_id, onClose }) => {
     const handleDelete = async (comment_id) => {
         try {
             const res = await axios.delete(
-                `http://192.168.0.11:8080/api/comment/${comment_id}`,
+                `http://192.168.0.7:8080/api/comment/${comment_id}`,
                 { headers: {
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "application/json"
@@ -71,22 +76,27 @@ const CommentPopup = ({ post_id, onClose }) => {
     return (
         <div className="popup-overlay">
             <div className="popup-content">
-                <button onClick={onClose}>x</button>
+                <button className="close-btn" onClick={onClose}>x</button>
                 <ul>
                     {comments.map((c) => (
-                        <li key={c.id}>
-                            <strong>{c.user.username}</strong>: {c.content}
-                            <button onClick={() => handleDelete(c.id)}>삭제</button>
+                        <li className="comment-item">
+                            <div className="comment-left">
+                                <strong>{c.user.username}</strong>: {c.content}
+                            </div>
+                            <button className="delete-btn" onClick={() => handleDelete(c.id)}>삭제</button>
                         </li>
                     ))}
                 </ul>
-                <input
-                    type="text"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    placeholder="댓글 작성"
-                />
-                <button onClick={handleSubmit}>등록</button>
+
+                <div className="comment-input-wrapper">
+                    <input
+                        type="text"
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        placeholder="댓글을 입력하세요"
+                    />
+                    <button onClick={handleSubmit}>등록</button>
+                </div>
             </div>
         </div>
     );

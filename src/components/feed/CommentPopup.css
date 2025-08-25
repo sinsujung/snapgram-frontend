@@ -21,22 +21,62 @@
     position: relative;
 }
 
-.popup-content button:first-of-type {
+.close-btn {
     position: absolute;
     top: 10px;
     right: 10px;
-    background: none;
     border: none;
     font-size: 18px;
     cursor: pointer;
+    background-color: transparent;
 }
-.popup-content input[type="text"] {
-    width: 100%;
-    padding: 10px;
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 15px;
+}
+
+.comment-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding: 6px 0;
+}
+
+.comment-left {
+    flex-grow: 1;
+    word-break: break-word;
+}
+
+.delete-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+}
+.comment-input-wrapper {
+    display: flex;
+    gap: 10px; /* input과 버튼 사이 간격 */
+    align-items: center;
     margin-top: 12px;
-    margin-bottom: 12px;
-    box-sizing: border-box;
+}
+
+.comment-input-wrapper input[type="text"] {
+    flex: 1; /* 남은 너비 전부 차지 */
+    padding: 6px;
     border-radius: 4px;
     border: 1px solid #ccc;
-    font-size: 16px;
+    font-size: 12px;
+}
+
+.comment-input-wrapper button {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    font-size: 12px;
+    cursor: pointer;
 }

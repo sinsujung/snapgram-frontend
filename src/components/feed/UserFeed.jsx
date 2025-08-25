@@ -25,7 +25,7 @@ const UserFeed = () => {
         try {
             if (isFollowing) {
                 // 언팔
-                const response = await axios.delete(`http://192.168.0.11:8080/api/follow?user_id=${userData.id}`, {
+                const response = await axios.delete(`http://192.168.0.7:8080/api/follow?user_id=${userData.id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -40,7 +40,7 @@ const UserFeed = () => {
             } else {
                 // 팔로우
                 const response = await axios.post(
-                    "http://192.168.0.11:8080/api/follow",
+                    "http://192.168.0.7:8080/api/follow",
                     { user_id: userData.id },
                     {
                         headers: {
@@ -71,7 +71,7 @@ const UserFeed = () => {
     useEffect(() => {
         const handleUserFeed = async () => {
             try {
-                const response = await axios.get(`http://192.168.0.11:8080/api/user/profile?user_id=${id}`,
+                const response = await axios.get(`http://192.168.0.7:8080/api/user/profile?user_id=${id}`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`}
