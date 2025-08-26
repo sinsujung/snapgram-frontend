@@ -1,0 +1,82 @@
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.popup-likeLists {
+    background: #333333;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    max-height: 80%;
+    overflow-y: auto;
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    background-color: transparent;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 15px;
+}
+
+.likeLists-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding: 6px 0;
+}
+
+.likeLists-left {
+    flex-grow: 1;
+    word-break: break-word;
+}
+
+.delete-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+}
+.likeLists-input-wrapper {
+    display: flex;
+    gap: 10px; /* input과 버튼 사이 간격 */
+    align-items: center;
+    margin-top: 12px;
+}
+
+.likeLists-input-wrapper input[type="text"] {
+    flex: 1; /* 남은 너비 전부 차지 */
+    padding: 6px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 12px;
+}
+
+.likeLists-input-wrapper button {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    font-size: 12px;
+    cursor: pointer;
+}

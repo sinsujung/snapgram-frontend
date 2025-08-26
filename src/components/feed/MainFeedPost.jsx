@@ -5,6 +5,7 @@ import IsLiked from "../../assets/liked.svg";
 import IsNotLiked from "../../assets/unliked.svg";
 import { useEffect, useState } from "react";
 import CommentPopup from "./CommentPopup.jsx";
+import LikeListPopup from "./LikeListPopup.jsx";
 
 const MainFeedPost = () => {
     const [userData, setUserData ] = useState(null);
@@ -14,9 +15,22 @@ const MainFeedPost = () => {
     const loggedInUserId = localStorage.getItem("userId");
 
     const [selectedPostId, setSelectedPostId] = useState(null);
+    const [popupType, setPopupType] = useState(null); // "comment" | "like" | null
+
 
     const handleCommentPopup = (post) => {
-        setSelectedPostId(post.id);
+    setSelectedPostId(post.id);
+    setPopupType("comment");
+    };
+
+    const handleLikeListPopup = (post) => {
+    setSelectedPostId(post.id);
+    setPopupType("like");
+    };
+
+    const handleClosePopup = () => {
+    setSelectedPostId(null);
+    setPopupType(null);
     };
     // 좋아요 갯수 상태
     // const [isLikedCount, setIsLikedCount] = useState(false);
@@ -30,6 +44,7 @@ const MainFeedPost = () => {
         navigate(`/user-feed/${posts.user.id}`);
     };
 
+    // real test
     const likeClickHandler = async(posts) => {
         const post_id = posts.id;
         const isCurrentlyLiked = posts.is_like;
@@ -94,42 +109,9 @@ const MainFeedPost = () => {
             alert("좋아요 실패!");
         }
     };
-    useEffect(() => {
-
-        setPosts([
-            {
-                id: 1,
-                user: { id: 1, username: "summer_dev" },
-                content: "오늘 날씨 너무 좋아요 🌞",
-                image_url: DefaultProfileImage,
-                created_at: "2025-07-01T12:34:56Z",
-                like_count: 12,
-                comment_count: 3,
-                is_like: false,
-            },
-            {
-                id: 2,
-                user: { id: 2, username: "code_master" },
-                content: "React로 만든 나만의 블로그 ✨",
-                image_url: null,
-                created_at: "2025-07-02T09:00:00Z",
-                like_count: 8,
-                comment_count: 1,
-                is_like: false,
-            },
-            {
-                id: 3,
-                user: { id: 3, username: "daily_life" },
-                content: "산책하다가 찍은 사진",
-                image_url: DefaultProfileImage,
-                created_at: "2025-07-03T18:10:00Z",
-                like_count: 20,
-                comment_count: 5,
-                is_like: true,
-            }
-        ]);
-
+        // real test
         // 192.168.0.18:8080
+    useEffect(() => {    
         const fetchPosts = async () => {
             try {
                 const response = await axios.get("http://192.168.0.7:8080/api/post", {
@@ -178,7 +160,7 @@ const MainFeedPost = () => {
 
                         <p style={{ color: "white" }}>{post.content}</p>
 
-                        <div style={{ color: "white" }}>
+                        <div style={{ color: "white", display: "flex"}}>
                             <div onClick={() => likeClickHandler(post)} style={{ cursor: "pointer" }}>
                                 <img
                                     src={post.is_like ? IsLiked : IsNotLiked}
@@ -187,7 +169,9 @@ const MainFeedPost = () => {
                                 />
                                 {post.like_count}
                             </div>
-
+                            <div style={{ cursor: "pointer" ,  marginLeft: "8px"}} onClick={() => handleLikeListPopup(post)}>
+                                좋아요 목록 보기
+                            </div>
                             <div>
                                 <p style={{ cursor: "pointer" }} onClick={() => handleCommentPopup(post)}>
                                     💬 {post.comment_count} 댓글보기
@@ -198,9 +182,14 @@ const MainFeedPost = () => {
                 ))}
             </div>
 
-            {selectedPostId && (
+            {popupType === "comment" && selectedPostId && (
                 <CommentPopup post_id={selectedPostId}
-                    onClose={() => setSelectedPostId(null)}/>
+                    onClose={handleClosePopup}/>
+            )}
+
+            {popupType === "like" && selectedPostId && (
+                <LikeListPopup post_id={selectedPostId}
+                    onClose={handleClosePopup}/>
             )}
         </>
     );
