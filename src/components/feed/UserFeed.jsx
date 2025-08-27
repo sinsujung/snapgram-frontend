@@ -10,52 +10,13 @@ const UserFeed = () => {
     const { id } = useParams();
     const [userData, setUserData ] = useState(null);
     const token = localStorage.getItem("token");
-    const [posts, setPosts] = useState([]);
+    const [postData, setPostData] = useState([]);
     const [isFollowing, setIsFollowing] = useState(false);
-    // const [isLike, setIsLike] = useState(false);
     const loggedInUserId = localStorage.getItem("userId");
     const navigate = useNavigate();
-    // const requestData = {
-    //     user_id: userData?.id,
-    // }
+
     const [showDetail, setShowDetail] = useState(false);
     const [detailPosts, setDetailPosts] = useState([]);
-
-    // 더미 데이터
-    useEffect(() => {
-    // 더미 데이터 설정
-    setUserData({
-        id: 1,
-        name: "테스트 유저",
-        nickname: "testuser",
-        profile_image_url: "",
-        post_count: 2,
-        follower_count: 10,
-        following_count: 5,
-    });
-
-    setPosts([
-        {
-            id: 101,
-            user: { id: 1, username: "testuser" },
-            image_url: "https://via.placeholder.com/300x250?text=Post+1",
-            content: "첫 번째 테스트 포스트입니다.",
-            is_like: false,
-            like_count: 3,
-            comment_count: 1,
-        },
-        {
-            id: 102,
-            user: { id: 1, username: "testuser" },
-            image_url: "https://via.placeholder.com/300x250?text=Post+2",
-            content: "두 번째 테스트 포스트입니다.",
-            is_like: true,
-            like_count: 5,
-            comment_count: 2,
-        }
-    ]);
-}, []);
-
 
     // 위까지
     const handlePostClick = () => {
@@ -113,29 +74,29 @@ const UserFeed = () => {
 
 
     // 실제 서버 연결
-    // useEffect(() => {
-    //     const handleUserFeed = async () => {
-    //         try {
-    //             const response = await axios.get(`http://192.168.0.7:8080/api/user/profile?user_id=${id}`,
-    //                 {
-    //                     headers: {
-    //                         Authorization: `Bearer ${token}`}
-    //                     });
-    //             const {code, data} = response.data;
+    useEffect(() => {
+        const handleUserFeed = async () => {
+            try {
+                const response = await axios.get(`http://192.168.0.7:8080/api/user/profile?user_id=${id}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`}
+                        });
+                const {code, data} = response.data;
 
-    //             if (code === 0) {
-    //                 setUserData(data.user);
-    //                 setPosts(data.posts || []);
-    //                 setIsFollowing(data.user.is_following); // following 상태 백엔드 서버에서 받을 수 있게 api 정보 바꾸기
-    //                 // setIsLike(data.user.is_like);
-    //             }
-    //         } catch (error) {
-    //             console.log("피드 로딩 실패", error);
-    //         }
-    //     };
-    //     handleUserFeed();
+                if (code === 0) {
+                    setUserData(data.user);
+                    setPostData(data.posts || []);
+                    setIsFollowing(data.user.is_following); // following 상태 백엔드 서버에서 받을 수 있게 api 정보 바꾸기
+                    // setIsLike(data.user.is_like);
+                }
+            } catch (error) {
+                console.log("피드 로딩 실패", error);
+            }
+        };
+        handleUserFeed();
 
-    // }, [id]);
+    }, [id]);
     // real test 여기 위까지
     // console.log(loggedInUserId, userData.id);
     if (!userData) return <div style={{color: "white"}}>로딩 중..</div>;

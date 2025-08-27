@@ -9,16 +9,15 @@ import LikeListPopup from "./LikeListPopup.jsx";
 
 import "./PostDetailViewer.css";
 
-const PostDetailViewer = ({ posts, initialPostId, onClose }) => {
+const PostDetailViewer = ({ posts, onClose }) => {
     const [localPosts, setLocalPosts] = useState(posts);
-    const [selectedPostId, setSelectedPostId] = useState(initialPostId);
     const token = localStorage.getItem("token");
-    const userId = Number(localStorage.getItem("userId"));
+    const userId = localStorage.getItem("userId");
     const navigate = useNavigate();
     const [popupType, setPopupType] = useState(null);
 
-    const handleNickNameClick = (post) => {
-        navigate(`/user-feed/${post.user.id}`);
+    const handleNickNameClick = (users) => {
+        navigate(`/user-feed/${users.user.id}`);
     };
 
     const likeClickHandler = async (post) => {
@@ -26,27 +25,53 @@ const PostDetailViewer = ({ posts, initialPostId, onClose }) => {
         const isCurrentlyLiked = post.is_like;
 
         try {
-            const response = await axios.post(
-                `http://192.168.0.7:8080/api/like`,
-                { post_id },
-                {
+            if (isCurrentlyLiked) {
+                // 좋아요 취소
+                const response = await axios.post(`http://192.168.0.7:8080/api/like`,
+                    {post_id: post_id},
+                    {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "application/json"
                     }
-                }
-            );
+                });
 
-            if (response.data.code === 0) {
-                setLocalPosts((prev) =>
-                    prev.map((p) =>
-                        p.id === post_id
-                            ? { ...p, is_like: !isCurrentlyLiked, like_count: isCurrentlyLiked ? p.like_count - 1 : p.like_count + 1 }
-                            : p
-                    )
-                );
+                if (response.data.code === 0) {
+                    setLocalPosts((prevpostData) =>
+                        prevpostData.map((p) =>
+                            p.id === post_id
+                                ? { ...p, is_like: false, like_count: p.like_count - 1}
+                                : p
+                        )
+                    );
+                } else {
+                    alert("좋아요 처리 실패");
+                }
             } else {
-                alert("좋아요 처리 실패");
+                const response = await axios.post(
+                   `http://192.168.0.7:8080/api/like`,{
+                    post_id: post_id},
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            "Content-Type": "application/json"
+                        }
+                    }
+                );
+
+                if (response.data.code === 0) {
+                    alert("complete liked!");
+                    // 좋아요 수 증가
+                    setPostData((prevpostData) =>
+                        prevpostData.map((p) =>
+                            p.id === post_id
+                                ? { ...p, is_like: true, like_count: p.like_count + 1 }
+                                : p
+                        )
+                    );
+                } else {
+                    alert("complete liked failed!");
+                }
             }
         } catch (error) {
             console.error("좋아요 실패", error);
@@ -94,7 +119,7 @@ const PostDetailViewer = ({ posts, initialPostId, onClose }) => {
                 {localPosts.map((post) => (
                     <div key={post.id} style={{ borderBottom: "1px solid #ccc", padding: "10px" }}>
                         <div className="post-nickName" style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
-                            <p style={{ color: "white", cursor: "pointer" }} onClick={() => handleNickNameClick(post)}>
+                            <p style={{ color: "white", cursor: "pointer" }} onClick={() => handleNickNameClick(users)}>
                                 <strong>@{post.user.username}</strong>
                             </p>
                             {post.user.id === userId && (
@@ -117,7 +142,7 @@ const PostDetailViewer = ({ posts, initialPostId, onClose }) => {
 
                         <p style={{ color: "white" }}>{post.content}</p>
 
-                        <div style={{ color: "white", display: "flex", alignItems: "center", gap: "10px" }}>
+                        <div style={{ color: "white", display: "flex", gap: "10px" }}>
                             <div onClick={() => likeClickHandler(post)} style={{ cursor: "pointer" }}>
                                 <img
                                     src={post.is_like ? IsLiked : IsNotLiked}

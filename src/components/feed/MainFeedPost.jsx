@@ -8,10 +8,9 @@ import CommentPopup from "./CommentPopup.jsx";
 import LikeListPopup from "./LikeListPopup.jsx";
 
 const MainFeedPost = () => {
-    const [userData, setUserData ] = useState(null);
     const token = localStorage.getItem("token");
     const navigate = useNavigate();
-    const [posts, setPosts] = useState([]);
+    const [postData, setPostData] = useState([]);
     const loggedInUserId = localStorage.getItem("userId");
 
     const [selectedPostId, setSelectedPostId] = useState(null);
@@ -49,8 +48,6 @@ const MainFeedPost = () => {
         const post_id = posts.id;
         const isCurrentlyLiked = posts.is_like;
 
-        // if(!userData) return;
-
         try {
             if (isCurrentlyLiked) {
                 // 좋아요 취소
@@ -65,8 +62,8 @@ const MainFeedPost = () => {
                 if (response.data.code === 0) {
                     alert("cancel liked!");
                      // 좋아요 수 감소 (실제)
-                    setPosts((prevPosts) =>
-                        prevPosts.map((p) =>
+                    setPostData((prevpostData) =>
+                        prevpostData.map((p) =>
                             p.id === post_id
                                 ? { ...p, is_like: false, like_count: p.like_count - 1 }
                                 : p
@@ -93,8 +90,8 @@ const MainFeedPost = () => {
                 if (response.data.code === 0) {
                     alert("complete liked!");
                     // 좋아요 수 증가
-                    setPosts((prevPosts) =>
-                        prevPosts.map((p) =>
+                    setPostData((prevpostData) =>
+                        prevpostData.map((p) =>
                             p.id === post_id
                                 ? { ...p, is_like: true, like_count: p.like_count + 1 }
                                 : p
@@ -122,7 +119,7 @@ const MainFeedPost = () => {
                 const { code, data } = response.data;
 
                 if (code === 0) {
-                    setPosts(data.posts || []);
+                    setPostData(data.posts || []);
                 }
 
             } catch (error) {
