@@ -8,7 +8,7 @@ const CommentPopup = ({ post_id, onClose }) => {
     const token = localStorage.getItem("token");
     const fetchComments = async () => {
         try {
-            const res = await axios.get(`http://192.168.0.7:8080/api/comment/${post_id}`, {
+            const res = await axios.get(`http://192.168.0.18:8080/api/comment/${post_id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 }
@@ -33,7 +33,7 @@ const CommentPopup = ({ post_id, onClose }) => {
 
         try {
             const response = await axios.post(
-                `http://192.168.0.7:8080/api/comment/${post_id}`, requestData, {
+                `http://192.168.0.18:8080/api/comment/${post_id}`, requestData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     }
@@ -55,7 +55,7 @@ const CommentPopup = ({ post_id, onClose }) => {
     const handleDelete = async (comment_id) => {
         try {
             const res = await axios.delete(
-                `http://192.168.0.7:8080/api/comment/${comment_id}`,
+                `http://192.168.0.18:8080/api/comment/${comment_id}`,
                 { headers: {
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "application/json"

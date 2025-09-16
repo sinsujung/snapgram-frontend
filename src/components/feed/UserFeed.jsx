@@ -20,8 +20,9 @@ const UserFeed = () => {
 
     // 위까지
     const handlePostClick = () => {
-        setDetailPosts(posts);
+        setDetailPosts(postData);
         setShowDetail(true);
+        console.log(loggedInUserId);
     };
 
     const handleFollow = async () => {
@@ -31,7 +32,7 @@ const UserFeed = () => {
         try {
             if (isFollowing) {
                 // 언팔
-                const response = await axios.delete(`http://192.168.0.7:8080/api/follow?user_id=${userData.id}`, {
+                const response = await axios.delete(`http://192.168.0.18:8080/api/follow?user_id=${userData.id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -46,7 +47,7 @@ const UserFeed = () => {
             } else {
                 // 팔로우
                 const response = await axios.post(
-                    "http://192.168.0.7:8080/api/follow",
+                    "http://192.168.0.18:8080/api/follow",
                     { user_id: userData.id },
                     {
                         headers: {
@@ -77,7 +78,7 @@ const UserFeed = () => {
     useEffect(() => {
         const handleUserFeed = async () => {
             try {
-                const response = await axios.get(`http://192.168.0.7:8080/api/user/profile?user_id=${id}`,
+                const response = await axios.get(`http://192.168.0.18:8080/api/user/profile?user_id=${id}`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`}
@@ -122,8 +123,8 @@ const UserFeed = () => {
             </div>
             <div>
                 <h3>게시물</h3>
-                {posts.length > 0 ? (
-                    posts.map(post => (
+                {postData.length > 0 ? (
+                    postData.map(post => (
                         <img key={post.id} src={post.image_url} alt={`게시물${post.id}`} width="200" onClick={handlePostClick} style={{ cursor: "pointer", margin: "10px" }}/>
                     ))
                 ) : (
@@ -133,6 +134,7 @@ const UserFeed = () => {
         </div>
         {showDetail && (
             <PostDetailViewer
+                user={userData}
                 posts={detailPosts}
                 onClose={() => setShowDetail(false)}
             />

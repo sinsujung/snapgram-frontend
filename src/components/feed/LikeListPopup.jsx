@@ -6,7 +6,7 @@ const LikeListPopup = ({ post_id, onClose }) => {
     const token = localStorage.getItem("token");
     const fetchLikes = async () => {
         try {
-            const res = await axios.get(`http://192.168.0.7:8080/api/post/like/${post_id}`, {
+            const res = await axios.get(`http://192.168.0.18:8080/api/post/like?post_id=${post_id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 }

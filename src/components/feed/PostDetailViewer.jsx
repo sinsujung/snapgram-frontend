@@ -9,25 +9,28 @@ import LikeListPopup from "./LikeListPopup.jsx";
 
 import "./PostDetailViewer.css";
 
-const PostDetailViewer = ({ posts, onClose }) => {
+const PostDetailViewer = ({ user, posts, onClose }) => {
     const [localPosts, setLocalPosts] = useState(posts);
+    const [localUser, setLocalUser] = useState(user);
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
     const navigate = useNavigate();
     const [popupType, setPopupType] = useState(null);
+    const [selectedPostId, setSelectedPostId] = useState(null);
 
-    const handleNickNameClick = (users) => {
-        navigate(`/user-feed/${users.user.id}`);
+    const handleNickNameClick = (user) => {
+        navigate(`/user-feed/${user.id}`);
     };
 
     const likeClickHandler = async (post) => {
         const post_id = post.id;
         const isCurrentlyLiked = post.is_like;
+        console.log(localUser.id , userId);
 
         try {
             if (isCurrentlyLiked) {
                 // 좋아요 취소
-                const response = await axios.post(`http://192.168.0.7:8080/api/like`,
+                const response = await axios.post(`http://192.168.0.18:8080/api/like`,
                     {post_id: post_id},
                     {
                     headers: {
@@ -49,7 +52,7 @@ const PostDetailViewer = ({ posts, onClose }) => {
                 }
             } else {
                 const response = await axios.post(
-                   `http://192.168.0.7:8080/api/like`,{
+                   `http://192.168.0.18:8080/api/like`,{
                     post_id: post_id},
                     {
                         headers: {
@@ -62,7 +65,7 @@ const PostDetailViewer = ({ posts, onClose }) => {
                 if (response.data.code === 0) {
                     alert("complete liked!");
                     // 좋아요 수 증가
-                    setPostData((prevpostData) =>
+                    setLocalPosts((prevpostData) =>
                         prevpostData.map((p) =>
                             p.id === post_id
                                 ? { ...p, is_like: true, like_count: p.like_count + 1 }
@@ -82,7 +85,7 @@ const PostDetailViewer = ({ posts, onClose }) => {
         if (!window.confirm("정말 삭제하시겠습니까?")) return;
 
         try {
-            const response = await axios.delete(`http://192.168.0.7:8080/api/post/${post_id}`, {
+            const response = await axios.delete(`http://192.168.0.18:8080/api/post?post_id=${post_id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 }
@@ -119,10 +122,10 @@ const PostDetailViewer = ({ posts, onClose }) => {
                 {localPosts.map((post) => (
                     <div key={post.id} style={{ borderBottom: "1px solid #ccc", padding: "10px" }}>
                         <div className="post-nickName" style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
-                            <p style={{ color: "white", cursor: "pointer" }} onClick={() => handleNickNameClick(users)}>
-                                <strong>@{post.user.username}</strong>
+                            <p style={{ color: "white", cursor: "pointer" }} onClick={() => handleNickNameClick(post.user)}>
+                                <strong>@{localUser.name}</strong>
                             </p>
-                            {post.user.id === userId && (
+                            {localUser.id == userId && (
                                 <div style={{ color: "red", cursor: "pointer" }} onClick={() => handleDeletePost(post.id)}>
                                     삭제
                                 </div>

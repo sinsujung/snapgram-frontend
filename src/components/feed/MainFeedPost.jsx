@@ -51,7 +51,7 @@ const MainFeedPost = () => {
         try {
             if (isCurrentlyLiked) {
                 // 좋아요 취소
-                const response = await axios.post(`http://192.168.0.7:8080/api/like`,
+                const response = await axios.post(`http://192.168.0.18:8080/api/like`,
                     {post_id: post_id},
                     {
                     headers: {
@@ -77,7 +77,7 @@ const MainFeedPost = () => {
                 // 좋아요
                 console.log(post_id);
                 const response = await axios.post(
-                   `http://192.168.0.7:8080/api/like`,{
+                   `http://192.168.0.18:8080/api/like`,{
                     post_id: post_id},
                     {
                         headers: {
@@ -111,7 +111,7 @@ const MainFeedPost = () => {
     useEffect(() => {    
         const fetchPosts = async () => {
             try {
-                const response = await axios.get("http://192.168.0.7:8080/api/post", {
+                const response = await axios.get("http://192.168.0.18:8080/api/post", {
                     params: { page: 1, size: 10 },
                     headers: {
                         Authorization: `Bearer ${token}` },
@@ -133,7 +133,7 @@ const MainFeedPost = () => {
     return (
         <>
             <div className="post-style">
-                {posts.map((post) => (
+                {postData.map((post) => (
                     <div key={post.id} style={{ borderBottom: "1px solid #ccc", padding: "10px" }}>
                         <div className="post-nickName">
                             <p
