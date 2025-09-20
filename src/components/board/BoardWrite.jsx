@@ -16,6 +16,7 @@ const BoardWrite = () => {
     const navigate = useNavigate();
     const handleFileChange = (e) => {
         const img = e.target.files[0];
+        console.log(img);
         if(!img) return;
         setImageFile(img);
 
@@ -23,22 +24,32 @@ const BoardWrite = () => {
         setPreview(previewUrl);
     };
 
+    const getImageURL = async() => {
+        console.log("사진이름" + imageFile);
+
+        const formData = new FormData();
+        formData.append("file", imageFile); // 실제 이미지 파일
+        formData.append("upload_preset", "snapgram");
+
+        let secure_url = "";
+        try {
+            const response= await axios.post("https://api.cloudinary.com/v1_1/dppmwsvyg/image/upload", formData);
+            return response.data.secure_url;
+        } catch(error) {
+            console.log(error);
+            return null;
+        }
+    }
     const handleUpload = async () => {
         console.log("content : " + content);
-        console.log("image_url : " + imageFile.name);
-        // const formData = new FormData();
 
-        // console.log("📤 content:", content);
-        // console.log("📷 imageFile:", imageFile);
-        // console.log("📦 formData entries:");
-        //
-        // for (let pair of formData.entries()) {
-        //     console.log(pair[0]+ ':', pair[1]);
-        // }
+        const url = await getImageURL();
+
+        console.log("image_url : " + url);
         const requestData = {
             content: content,
-            image_url: imageFile.name
-        }
+            image_url: url,
+        };
 
         console.log("2");
         // formData.append("content", content);
